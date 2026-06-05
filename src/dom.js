@@ -2,15 +2,21 @@ import {createToDo, myToDos} from "./todo.js";
 const app = document.getElementById("app");
 const wrapper = document.getElementById("wrapper");
 const newBtn = document.createElement("button");
-const completedBtn = document.createElement("button");
-
 newBtn.textContent = "+";
 newBtn.className = "w-10 h-10 bg-green-800 text-white text-2xl rounded-full flex justify-center items-center hover:bg-green-600 position absolute bottom-5 right-5";
 newBtn.id = "add-todo-btn";
-
 newBtn.addEventListener("click", () => {
     createToDoForm.classList.toggle("hidden");
 });
+
+function createCompletedButton(index) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Toggle Complete";
+    button.className = "mt-2 rounded-lg bg-white px-3 py-1 text-sm text-black hover:bg-gray-200 completed-btn";
+    button.dataset.index = index;
+    return button;
+}
 
 const createToDoForm = document.createElement("form");
 createToDoForm.innerHTML = `
@@ -47,6 +53,14 @@ function renderToDos() {
         <p> Priority: ${toDo.priority}</p>`;
         toDoItem.className = "bg-emerald-500 rounded-lg p-4 w-80 flex flex-col gap-2 justify-center items-center text-white hover:bg-emerald-400 shadow-lg shadow-emerald-700";
 
+        if (toDo.completed) {
+            toDoItem.style.textDecoration = "line-through";
+            toDoItem.style.opacity = "0.5";
+        } else {
+            toDoItem.style.textDecoration = "none";
+            toDoItem.style.opacity = "1";
+        }
+        
         switch(toDo.priority) {
             case "low":
                 toDoItem.classList.add("border-2", "border-green-300");
@@ -58,6 +72,18 @@ function renderToDos() {
                 toDoItem.classList.add("border-2", "border-red-300");
                 break;
         }
+        const completedButton = createCompletedButton(myToDos.indexOf(toDo));
+        completedButton.addEventListener("click", () => {
+            toDo.ToggleCompleted();
+            if (toDo.completed) {
+                toDoItem.classList.add("line-through", "opacity-50");
+            } else {
+                toDoItem.classList.remove("line-through", "opacity-50");
+            }
+            renderToDos();
+        });
+
+        toDoItem.appendChild(completedButton);
         toDoDisplay.appendChild(toDoItem);
     });
 }
