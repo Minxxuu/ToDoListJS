@@ -1,4 +1,4 @@
-const myToDos = [];
+export const myToDos = [];
 
 export class ToDo {
     constructor(title, description, dateDue, priority, completed) {

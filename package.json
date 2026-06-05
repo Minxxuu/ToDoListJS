@@ -4,6 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "concurrently \"npm run tw:watch\" \"npm run start\"",
+    "start": "webpack serve",
+    "tw:build": "npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css",
+    "tw:watch": "npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,11 +23,13 @@
   },
   "homepage": "https://github.com/Minxxuu/ToDoListJS#readme",
   "devDependencies": {
+    "concurrently": "^10.0.3",
     "css-loader": "^7.1.4",
     "html-webpack-plugin": "^5.6.7",
     "style-loader": "^4.0.0",
     "webpack": "^5.107.2",
-    "webpack-cli": "^7.0.3"
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.4"
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.3.0",
