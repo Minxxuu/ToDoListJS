@@ -9,10 +9,19 @@ newBtn.addEventListener("click", () => {
     createToDoForm.classList.toggle("hidden");
 });
 
+function createDeleteButton(index) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Delete";
+    button.className = "mt-2 rounded-lg bg-red-500 px-3 py-1 text-sm text-white hover:bg-red-700 delete-btn";
+    button.dataset.index = index;
+    return button;
+}
+
 function createCompletedButton(index) {
     const button = document.createElement("button");
     button.type = "button";
-    button.textContent = "Toggle Complete";
+    button.textContent = "Complete";
     button.className = "mt-2 rounded-lg bg-white px-3 py-1 text-sm text-black hover:bg-gray-200 completed-btn";
     button.dataset.index = index;
     return button;
@@ -21,17 +30,17 @@ function createCompletedButton(index) {
 const createToDoForm = document.createElement("form");
 createToDoForm.innerHTML = `
     <label for="todo-input">Name</label>
-    <input type="text" id="todo-input" class = "border-2 border-gray-400 bg-blue-50 h-10 w-50 rounded-lg" placeholder="Enter a new to-do item" required />
+    <input type="text" id="todo-input" class = "border-2 border-gray-400 bg-blue-50 h-10 w-full rounded-lg" placeholder="Enter a new to-do item" required />
     <label for = Description> Description </label>
-    <textarea id="description-input" class = "h-50 border-2 border-gray-400 bg-blue-50 rounded-lg" placeholder="Enter a description for the to-do item" required></textarea>
+    <textarea id="description-input" class = "h-50 border-2 border-gray-400 bg-blue-50 rounded-lg w-full" placeholder="Enter a description for the to-do item" required></textarea>
     <label for = DateDue> Date Due </label>
-    <input type="date" id="date-due-input" class = "border-2 border-gray-400 bg-blue-50 rounded-lg" required />
+    <input type="date" id="date-due-input" class = "border-2 border-gray-400 bg-blue-50 rounded-lg h-8 w-full" required />
     <label for = Priority> Priority </label>
-    <select id="priority-input" class = "border-2 border-gray-400 bg-blue-50 rounded-lg" required>
-        <option value="">Select priority</option>
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
+    <select id="priority-input" class = "border-2 border-gray-400 bg-blue-50 rounded-lg w-full h-8" required>
+        <option>Select priority</option>
+        <option value="low" class = "text-green-500">Low</option>
+        <option value="medium" class = "text-yellow-500">Medium</option>
+        <option value="high" class = "text-red-500">High</option>
     </select>
     <button type="submit" class ="flex justify-center items-center ml-3 w-50 bg-green-300 hover:bg-green-600">Add To-Do</button>
 `;
@@ -41,7 +50,7 @@ wrapper.className = "flex flex-row items-center";
 
 const toDoDisplay = document.createElement("div");
 toDoDisplay.id = "todo-display";
-toDoDisplay.className = "mt-10 bg-emerald-600 p-5 rounded-lg w-full h-full flex flex-row gap-4 mr-4 ml-4 flex-wrap justify-center";
+toDoDisplay.className = "mt-5 bg-emerald-600 p-5 rounded-lg w-full h-full flex flex-row gap-4 mr-4 ml-4 flex-wrap justify-center";
 
 function renderToDos() {
     toDoDisplay.innerHTML = "";
@@ -74,7 +83,7 @@ function renderToDos() {
         }
         const completedButton = createCompletedButton(myToDos.indexOf(toDo));
         completedButton.addEventListener("click", () => {
-            toDo.ToggleCompleted();
+            toDo.ToggleCompleted(); 
             if (toDo.completed) {
                 toDoItem.classList.add("line-through", "opacity-50");
             } else {
@@ -84,6 +93,13 @@ function renderToDos() {
             renderToDos();
         });
         toDoItem.appendChild(completedButton);
+        const deleteButton = createDeleteButton(myToDos.indexOf(toDo));
+        deleteButton.addEventListener("click", () => {
+            myToDos.splice(myToDos.indexOf(toDo), 1);
+            saveToDos();
+            renderToDos();
+        });
+        toDoItem.appendChild(deleteButton);
         toDoDisplay.appendChild(toDoItem);
     });
 }
