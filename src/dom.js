@@ -1,8 +1,8 @@
-import {createToDo, myToDos} from "./todo.js";
+import {createToDo, loadToDos, myToDos, saveToDos} from "./todo.js";
 const app = document.getElementById("app");
 const wrapper = document.getElementById("wrapper");
 const newBtn = document.createElement("button");
-newBtn.textContent = "+";
+newBtn.textContent = "+";   
 newBtn.className = "w-10 h-10 bg-green-800 text-white text-2xl rounded-full flex justify-center items-center hover:bg-green-600 position absolute bottom-5 right-5";
 newBtn.id = "add-todo-btn";
 newBtn.addEventListener("click", () => {
@@ -80,9 +80,9 @@ function renderToDos() {
             } else {
                 toDoItem.classList.remove("line-through", "opacity-50");
             }
+            saveToDos();
             renderToDos();
         });
-
         toDoItem.appendChild(completedButton);
         toDoDisplay.appendChild(toDoItem);
     });
@@ -95,6 +95,7 @@ function handleFormSubmit(event) {
     const dateDue = document.getElementById("date-due-input").value;
     const priority = document.getElementById("priority-input").value;
     createToDo(title, description, dateDue, priority, false);
+    saveToDos();
     renderToDos();
     createToDoForm.reset();
 }
@@ -104,5 +105,5 @@ createToDoForm.addEventListener("submit", handleFormSubmit);
 app.appendChild(newBtn);
 wrapper.appendChild(createToDoForm);
 wrapper.appendChild(toDoDisplay);
-createToDo ("Sample To-Do", "This is a sample to-do item.", "2024-12-31", "medium", false);
+loadToDos();
 renderToDos();
