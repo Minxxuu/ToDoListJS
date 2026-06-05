@@ -2,6 +2,8 @@ import {createToDo, myToDos} from "./todo.js";
 const app = document.getElementById("app");
 const wrapper = document.getElementById("wrapper");
 const newBtn = document.createElement("button");
+const completedBtn = document.createElement("button");
+
 newBtn.textContent = "+";
 newBtn.className = "w-10 h-10 bg-green-800 text-white text-2xl rounded-full flex justify-center items-center hover:bg-green-600 position absolute bottom-5 right-5";
 newBtn.id = "add-todo-btn";
@@ -9,7 +11,6 @@ newBtn.id = "add-todo-btn";
 newBtn.addEventListener("click", () => {
     createToDoForm.classList.toggle("hidden");
 });
-
 
 const createToDoForm = document.createElement("form");
 createToDoForm.innerHTML = `
@@ -26,7 +27,7 @@ createToDoForm.innerHTML = `
         <option value="medium">Medium</option>
         <option value="high">High</option>
     </select>
-    <button type="submit" class ="flex justify-center items-center ml-3 w-50 bg-green-300 text-white border-2 border-amber-900 hover:bg-green-400">Add To-Do</button>
+    <button type="submit" class ="flex justify-center items-center ml-3 w-50 bg-green-300 hover:bg-green-600">Add To-Do</button>
 `;
 createToDoForm.className = "flex flex-col items-start gap-4 ml-5 hidden mt-5 bg-emerald-200 p-5 rounded-lg h-full";
 
@@ -41,9 +42,9 @@ function renderToDos() {
     myToDos.forEach((toDo) => {
         const toDoItem = document.createElement("div");
         toDoItem.innerHTML = `<h2>${toDo.title}</h2>
-    <p>${toDo.description}</p>
-    <p>${toDo.dateDue}</p>
-    <p>${toDo.priority}</p>`;
+        <p>${toDo.description}</p>
+        <p> Due: ${toDo.dateDue}</p>
+        <p> Priority: ${toDo.priority}</p>`;
         toDoItem.className = "bg-emerald-500 rounded-lg p-4 w-80 flex flex-col gap-2 justify-center items-center text-white hover:bg-emerald-400 shadow-lg shadow-emerald-700";
 
         switch(toDo.priority) {
@@ -57,12 +58,9 @@ function renderToDos() {
                 toDoItem.classList.add("border-2", "border-red-300");
                 break;
         }
-
         toDoDisplay.appendChild(toDoItem);
     });
 }
-
-
 
 function handleFormSubmit(event) {
     event.preventDefault();
