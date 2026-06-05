@@ -2,12 +2,13 @@ export const myToDos = [];
 const STORAGE_KEY = "myToDos";
 
 export class ToDo {
-    constructor(title, description, dateDue, priority, completed) {
+    constructor(title, description, dateDue, priority, completed, expanded = false) {
         this.title = title;
         this.description = description;
         this.dateDue = dateDue;
         this.priority = priority;
         this.completed = completed;
+        this.expanded = expanded;
     }
     ToggleCompleted() {
         this.completed = !this.completed;
@@ -18,8 +19,8 @@ export class ToDo {
     }
 }
 
-export function createToDo(title, description, dateDue, priority, completed) {
-    const newToDo = new ToDo(title, description, dateDue, priority, completed);
+export function createToDo(title, description, dateDue, priority, completed, expanded = false) {
+    const newToDo = new ToDo(title, description, dateDue, priority, completed, expanded);
     newToDo.save();
     return newToDo;
 }
@@ -44,7 +45,8 @@ export function loadToDos() {
                 storedToDo.description,
                 storedToDo.dateDue,
                 storedToDo.priority,
-                storedToDo.completed
+                storedToDo.completed,
+                storedToDo.expanded
             )
         );
     });

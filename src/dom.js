@@ -56,11 +56,17 @@ function renderToDos() {
     toDoDisplay.innerHTML = "";
     myToDos.forEach((toDo) => {
         const toDoItem = document.createElement("div");
+
+        if (toDo.expanded) {
         toDoItem.innerHTML = `<h2>${toDo.title}</h2>
         <p>${toDo.description}</p>
         <p> Due: ${toDo.dateDue}</p>
         <p> Priority: ${toDo.priority}</p>`;
-        toDoItem.className = "bg-emerald-500 rounded-lg p-4 w-80 flex flex-col gap-2 justify-center items-center text-white hover:bg-emerald-400 shadow-lg shadow-emerald-700";
+        } else {
+            toDoItem.innerHTML = `<h2>${toDo.title}</h2>`;
+        }
+
+        toDoItem.className = "bg-emerald-500 rounded-lg p-4 w-80 flex flex-col gap-2 justify-center items-center text-white hover:bg-emerald-400 shadow-lg shadow-emerald-700 cursor-pointer";
 
         if (toDo.completed) {
             toDoItem.style.textDecoration = "line-through";
@@ -82,23 +88,26 @@ function renderToDos() {
                 break;
         }
         const completedButton = createCompletedButton(myToDos.indexOf(toDo));
-        completedButton.addEventListener("click", () => {
+        completedButton.addEventListener("click", (event) => {
+            event.stopPropagation();
             toDo.ToggleCompleted(); 
-            if (toDo.completed) {
-                toDoItem.classList.add("line-through", "opacity-50");
-            } else {
-                toDoItem.classList.remove("line-through", "opacity-50");
-            }
             saveToDos();
-            renderToDos();
+            renderToDos(); 
         });
         toDoItem.appendChild(completedButton);
         const deleteButton = createDeleteButton(myToDos.indexOf(toDo));
-        deleteButton.addEventListener("click", () => {
+        deleteButton.addEventListener("click", (event) => {
+            event.stopPropagation();
             myToDos.splice(myToDos.indexOf(toDo), 1);
             saveToDos();
             renderToDos();
         });
+
+        toDoItem.addEventListener("click", () => {
+            toDo.expanded = !toDo.expanded;
+            renderToDos();
+        });
+
         toDoItem.appendChild(deleteButton);
         toDoDisplay.appendChild(toDoItem);
     });
